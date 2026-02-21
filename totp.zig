@@ -53,7 +53,7 @@ pub const Algorithm = enum {
 pub fn generateUrl(allocator: std.mem.Allocator, issuer: []const u8, account: []const u8, secret_raw: []const u8, algo: Algorithm, digits: u8, period: u8) ![]const u8 {
     std.debug.assert(issuer.len > 0);
     std.debug.assert(account.len > 0);
-    std.debug.assert(secret_raw.len == algo.digest_length());
+    std.debug.assert(secret_raw.len <= algo.digest_length());
     std.debug.assert(digits == 6 or digits == 7 or digits == 8);
     std.debug.assert(period == 15 or period == 30 or period == 60);
     var list: std.ArrayList(u8) = .init(allocator);
