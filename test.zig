@@ -53,3 +53,9 @@ test {
     defer allocator.free(url);
     try expect(url).toEqualString("otpauth://totp/Example:alice@google.com?secret=JBSWY3DPEHPK3PXP&algorithm=SHA1&digits=6&period=30");
 }
+test {
+    const allocator = std.testing.allocator;
+    const url = try totp.generateUrl(allocator, "otpauth demo", "username@example.org", &from_hex("0000008421d6b5adef7bc6318ce739f7bdefffff"), .SHA1, 6, 30);
+    defer allocator.free(url);
+    try expect(url).toEqualString("otpauth://totp/otpauth%20demo:username@example.org?secret=AAAABBBB22223333YYYYZZZZ66667777&algorithm=SHA1&digits=6&period=30");
+}
