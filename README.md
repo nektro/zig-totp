@@ -11,3 +11,5 @@ RFC 6238: TOTP: Time-Based One-Time Password Algorithm
 https://www.rfc-editor.org/rfc/rfc6238 TOTP: Time-Based One-Time Password Algorithm
 
 https://www.rfc-editor.org/rfc/rfc4226 HOTP: An HMAC-Based One-Time Password Algorithm
+
+https://github.com/google/google-authenticator/wiki/Key-Uri-Format

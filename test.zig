@@ -40,3 +40,10 @@ test { try expect(&totp.totp(8, Sha512, 0, 30, &from_hex(seed64), 1234567890)).t
 test { try expect(&totp.totp(8, Sha512, 0, 30, &from_hex(seed64), 2000000000)).toEqualString("38618901"); }
 test { try expect(&totp.totp(8, Sha512, 0, 30, &from_hex(seed64), 20000000000)).toEqualString("47863826"); }
 // zig fmt: on
+
+test {
+    const allocator = std.testing.allocator;
+    const url = try totp.generateUrl(allocator, "ACME Co", "john.doe@email.com", &from_hex("3dc6caa4824a6d288767b2331e20b43166cb85d9"), .SHA1, 6, 30);
+    defer allocator.free(url);
+    try expect(url).toEqualString("otpauth://totp/ACME%20Co:john.doe@email.com?secret=HXDMVJECJJWSRB3HWIZR4IFUGFTMXBOZ&algorithm=SHA1&digits=6&period=30");
+}

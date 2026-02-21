@@ -5,6 +5,8 @@ license: MPL-2.0
 description: "RFC 6238: TOTP: Time-Based One-Time Password Algorithm"
 dependencies:
   - src: git https://github.com/nektro/zig-extras
+  - src: git https://github.com/nektro/zig-whatwg-url
 root_dependencies:
   - src: git https://github.com/nektro/zig-extras
   - src: git https://github.com/nektro/zig-expect
+  - src: git https://github.com/nektro/zig-whatwg-url
