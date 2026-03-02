@@ -71,6 +71,8 @@ pub fn generateUrl(allocator: std.mem.Allocator, issuer: []const u8, account: []
     try list.writer().print("{d}", .{digits});
     try list.appendSlice("&period=");
     try list.writer().print("{d}", .{period});
+    try list.appendSlice("&issuer=");
+    try url.percentEncodeAL(&list, issuer, url.is_query_percent_char);
     return list.toOwnedSlice();
 }
 

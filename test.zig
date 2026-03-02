@@ -45,17 +45,17 @@ test {
     const allocator = std.testing.allocator;
     const url = try totp.generateUrl(allocator, "ACME Co", "john.doe@email.com", &from_hex("3dc6caa4824a6d288767b2331e20b43166cb85d9"), .SHA1, 6, 30);
     defer allocator.free(url);
-    try expect(url).toEqualString("otpauth://totp/ACME%20Co:john.doe@email.com?secret=HXDMVJECJJWSRB3HWIZR4IFUGFTMXBOZ&algorithm=SHA1&digits=6&period=30");
+    try expect(url).toEqualString("otpauth://totp/ACME%20Co:john.doe@email.com?secret=HXDMVJECJJWSRB3HWIZR4IFUGFTMXBOZ&algorithm=SHA1&digits=6&period=30&issuer=ACME%20Co");
 }
 test {
     const allocator = std.testing.allocator;
     const url = try totp.generateUrl(allocator, "Example", "alice@google.com", &from_hex("48656c6c6f21deadbeef"), .SHA1, 6, 30);
     defer allocator.free(url);
-    try expect(url).toEqualString("otpauth://totp/Example:alice@google.com?secret=JBSWY3DPEHPK3PXP&algorithm=SHA1&digits=6&period=30");
+    try expect(url).toEqualString("otpauth://totp/Example:alice@google.com?secret=JBSWY3DPEHPK3PXP&algorithm=SHA1&digits=6&period=30&issuer=Example");
 }
 test {
     const allocator = std.testing.allocator;
     const url = try totp.generateUrl(allocator, "otpauth demo", "username@example.org", &from_hex("0000008421d6b5adef7bc6318ce739f7bdefffff"), .SHA1, 6, 30);
     defer allocator.free(url);
-    try expect(url).toEqualString("otpauth://totp/otpauth%20demo:username@example.org?secret=AAAABBBB22223333YYYYZZZZ66667777&algorithm=SHA1&digits=6&period=30");
+    try expect(url).toEqualString("otpauth://totp/otpauth%20demo:username@example.org?secret=AAAABBBB22223333YYYYZZZZ66667777&algorithm=SHA1&digits=6&period=30&issuer=otpauth%20demo");
 }
