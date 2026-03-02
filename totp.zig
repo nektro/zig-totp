@@ -123,3 +123,25 @@ const BufBiterator = struct {
         return @intFromBool(result);
     }
 };
+
+pub fn decodeBase32(input: []const u8, Hash: type) ![Hash.digest_length]u8 {
+    var result: std.bit_set.ArrayBitSet(u8, Hash.digest_length * 8) = .initEmpty();
+    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
+    for (input, 0..) |c, i| {
+        const x = std.mem.indexOfScalar(u8, alphabet, c) orelse return error.InvalidCharacter;
+        const n: u5 = @intCast(x);
+        inline for (0..5) |j| blk: {
+            if (i * 5 > result.capacity()) return error.Overflow;
+            const d = i * 5 + j;
+            if (d >= result.capacity()) break :blk;
+            result.setValue(d, n & (1 << 5 - 1 - (j)) != 0);
+        }
+    }
+    return bitReverse(result.masks);
+}
+
+fn bitReverse(array: anytype) [array.len]std.meta.Child(@TypeOf(array)) {
+    var result: [array.len]std.meta.Child(@TypeOf(array)) = @splat(0);
+    for (&array, &result) |x, *y| y.* = @bitReverse(x);
+    return result;
+}

@@ -59,3 +59,11 @@ test {
     defer allocator.free(url);
     try expect(url).toEqualString("otpauth://totp/otpauth%20demo:username@example.org?secret=AAAABBBB22223333YYYYZZZZ66667777&algorithm=SHA1&digits=6&period=30&issuer=otpauth%20demo");
 }
+
+test {
+    const b32 = "SC5IH4S3HJLEWOGXJM4BL6CH5BDSYHBV";
+    const hex_expected = "90ba83f25b3a564b38d74b3815f847e8472c1c35";
+    const raw_actual = try totp.decodeBase32(b32, std.crypto.hash.Sha1);
+    const hex_actual = extras.to_hex(raw_actual);
+    try expect(&hex_actual).toEqualString(hex_expected);
+}
