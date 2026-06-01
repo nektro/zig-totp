@@ -56,7 +56,7 @@ pub fn generateUrl(allocator: std.mem.Allocator, issuer: []const u8, account: []
     std.debug.assert(secret_raw.len <= algo.digest_length());
     std.debug.assert(digits == 6 or digits == 7 or digits == 8);
     std.debug.assert(period == 15 or period == 30 or period == 60);
-    var list: std.ArrayList(u8) = .init(allocator);
+    var list: std.array_list.Managed(u8) = .init(allocator);
     errdefer list.deinit();
     try list.appendSlice("otpauth://");
     try list.appendSlice("totp/");
@@ -78,7 +78,7 @@ pub fn generateUrl(allocator: std.mem.Allocator, issuer: []const u8, account: []
 
 // RFC3548 base32
 // input.len is gonna be 64 | 32 | 64
-fn encodeBase32(list: *std.ArrayList(u8), input: []const u8) !void {
+fn encodeBase32(list: *std.array_list.Managed(u8), input: []const u8) !void {
     const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
     var iter = BufBiterator.init(input);
     while (iter.nextInt(u5)) |idx| try list.append(alphabet[idx]);
