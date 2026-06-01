@@ -12,6 +12,3 @@ MIT:
 - git https://github.com/nektro/zig-sys-darwin
 - git https://github.com/nektro/zig-sys-linux
 - git https://github.com/nektro/zig-unicode-ucd
-
-Unspecified:
-- system_lib c
