@@ -1,6 +1,7 @@
 const std = @import("std");
 const extras = @import("extras");
 const url = @import("url");
+const nio = @import("nio");
 
 pub fn totp(digits: comptime_int, Hash: type, epoch: u64, X: u64, K: *const [Hash.digest_length]u8, time_now_s: u64) [digits]u8 {
     const T = (time_now_s - epoch) / X;
@@ -56,32 +57,32 @@ pub fn generateUrl(allocator: std.mem.Allocator, issuer: []const u8, account: []
     std.debug.assert(secret_raw.len <= algo.digest_length());
     std.debug.assert(digits == 6 or digits == 7 or digits == 8);
     std.debug.assert(period == 15 or period == 30 or period == 60);
-    var list: std.array_list.Managed(u8) = .init(allocator);
+    var list: nio.AllocatingWriter = .init(allocator);
     errdefer list.deinit();
-    try list.appendSlice("otpauth://");
-    try list.appendSlice("totp/");
+    try list.writeAll("otpauth://");
+    try list.writeAll("totp/");
     try url.percentEncodeAL(&list, issuer, url.is_path_percent_char);
-    try list.append(':');
+    try list.writeAll(":");
     try url.percentEncodeAL(&list, account, url.is_path_percent_char);
-    try list.appendSlice("?secret=");
+    try list.writeAll("?secret=");
     try encodeBase32(&list, secret_raw);
-    try list.appendSlice("&algorithm=");
-    try list.appendSlice(@tagName(algo));
-    try list.appendSlice("&digits=");
-    try list.writer().print("{d}", .{digits});
-    try list.appendSlice("&period=");
-    try list.writer().print("{d}", .{period});
-    try list.appendSlice("&issuer=");
+    try list.writeAll("&algorithm=");
+    try list.writeAll(@tagName(algo));
+    try list.writeAll("&digits=");
+    try list.print("{d}", .{digits});
+    try list.writeAll("&period=");
+    try list.print("{d}", .{period});
+    try list.writeAll("&issuer=");
     try url.percentEncodeAL(&list, issuer, url.is_query_percent_char);
     return list.toOwnedSlice();
 }
 
 // RFC3548 base32
 // input.len is gonna be 64 | 32 | 64
-fn encodeBase32(list: *std.array_list.Managed(u8), input: []const u8) !void {
+fn encodeBase32(list: *nio.AllocatingWriter, input: []const u8) !void {
     const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
     var iter = BufBiterator.init(input);
-    while (iter.nextInt(u5)) |idx| try list.append(alphabet[idx]);
+    while (iter.nextInt(u5)) |idx| try list.writeAll(alphabet[idx..][0..1]);
 }
 
 const BufBiterator = struct {

@@ -6,6 +6,7 @@ description: "RFC 6238: TOTP: Time-Based One-Time Password Algorithm"
 dependencies:
   - src: git https://github.com/nektro/zig-extras
   - src: git https://github.com/nektro/zig-whatwg-url
+  - src: git https://github.com/nektro/zig-nio
 root_dependencies:
   - src: git https://github.com/nektro/zig-extras
   - src: git https://github.com/nektro/zig-expect
