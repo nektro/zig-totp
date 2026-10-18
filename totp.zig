@@ -126,7 +126,7 @@ const BufBiterator = struct {
 };
 
 pub fn decodeBase32(input: []const u8, Hash: type) ![Hash.digest_length]u8 {
-    var result: std.bit_set.ArrayBitSet(u8, Hash.digest_length * 8) = .initEmpty();
+    var result: std.bit_set.ArrayBitSet(u8, Hash.digest_length * 8) = .empty;
     const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
     for (input, 0..) |c, i| {
         const x = std.mem.indexOfScalar(u8, alphabet, c) orelse return error.InvalidCharacter;
